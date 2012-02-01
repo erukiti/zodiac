@@ -1,0 +1,100 @@
+#@configure_input@
+TARGET  = z80.a
+
+#AR      = ar
+#ARFLAGS = cr
+#CC      = gcc
+AR      = @AR@
+ARFLAGS = @ARFLAGS@
+CC      = @CC@
+RANLIB	= @RANLIB@
+FLEX	= @FLEX@
+
+#include	../Makeopt
+
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd \
+			`@top_srcdir@/libmd/md-config --cflags`
+
+OBJS    = z80.o z80_codecb.o z80_codeed.o z80_codemn.o z80_codexx.o z80_debugger.o
+SRCS    = $(OBJS:.o=.c)
+TARS    = $(SRCS) Makefile.in z80.h z80_internal.h CVS/
+
+
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $(TARGET)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $(TARGET)
+
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
+
+tar:
+	@(cd .. ; tar zcvf z80/z80.tar.gz `echo $(TARS) | tr [:space:] "\n" | sed -e s:^:z80/:` )
+
+
+distclean:
+	rm -f $(OBJS) $(TARGET) Makefile *~
+
+clean:
+	rm -f $(OBJS) $(TARGET) *~
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+install:
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+z80.o: ../zodiac.h ../../libmd/md.h
+z80.o: ../../libmd/config.h ../../config.h ../../libmd/md_depend.h
+z80.o: ../misc/ut.h
+z80.o: z80.h ../z80_config.h ../zdb.h ../z80_fastmem.h
+z80.o: ../msx/msx.h ../misc/ut.h ../z80/z80.h ../v99x8/v99x8.h z80_internal.h
+z80_codecb.o: ../zodiac.h ../../libmd/md.h ../../libmd/config.h
+z80_codecb.o: ../../config.h ../../libmd/md_depend.h
+z80_codecb.o: ../misc/ut.h
+z80_codecb.o: z80.h ../z80_config.h ../zdb.h
+z80_codecb.o: ../z80_fastmem.h ../msx/msx.h ../misc/ut.h ../z80/z80.h
+z80_codecb.o: ../v99x8/v99x8.h z80_internal.h
+z80_codeed.o: ../zodiac.h ../../libmd/md.h ../../libmd/config.h
+z80_codeed.o: ../../config.h ../../libmd/md_depend.h
+z80_codeed.o: ../misc/ut.h
+z80_codeed.o: z80.h ../z80_config.h ../zdb.h
+z80_codeed.o: ../z80_fastmem.h ../msx/msx.h ../misc/ut.h ../z80/z80.h
+z80_codeed.o: ../v99x8/v99x8.h z80_internal.h
+z80_codemn.o: ../zodiac.h ../../libmd/md.h ../../libmd/config.h
+z80_codemn.o: ../../config.h ../../libmd/md_depend.h
+z80_codemn.o: ../misc/ut.h
+z80_codemn.o: z80.h ../z80_config.h ../zdb.h
+z80_codemn.o: ../z80_fastmem.h ../msx/msx.h ../misc/ut.h ../z80/z80.h
+z80_codemn.o: ../v99x8/v99x8.h z80_internal.h
+z80_codexx.o: ../zodiac.h ../../libmd/md.h ../../libmd/config.h
+z80_codexx.o: ../../config.h ../../libmd/md_depend.h
+z80_codexx.o: ../misc/ut.h
+z80_codexx.o: z80.h ../z80_config.h ../zdb.h
+z80_codexx.o: ../z80_fastmem.h ../msx/msx.h ../misc/ut.h ../z80/z80.h
+z80_codexx.o: ../v99x8/v99x8.h z80_internal.h
+z80_debugger.o: ../../config.h
+z80_debugger.o: ../zodiac.h ../../libmd/md.h ../../libmd/config.h
+z80_debugger.o: ../../config.h ../../libmd/md_depend.h
+z80_debugger.o: ../misc/ut.h
+z80_debugger.o: z80.h ../z80_config.h ../zdb.h
+z80_debugger.o: ../z80_fastmem.h ../msx/msx.h ../misc/ut.h ../z80/z80.h
+z80_debugger.o: ../v99x8/v99x8.h z80_internal.h ../msx/msx.h

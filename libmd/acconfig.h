@@ -1,0 +1,2 @@
+/*  */
+#undef MD_NEEDTYPE

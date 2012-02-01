@@ -1,0 +1,88 @@
+#@configure_input@
+TARGET  = msx.a
+
+#AR      = ar
+#ARFLAGS = cr
+#CC      = gcc
+AR      = @AR@
+ARFLAGS = @ARFLAGS@
+CC      = @CC@
+RANLIB	= @RANLIB@
+
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd -I../z80 \
+			`@top_srcdir@/libmd/md-config --cflags`
+#			-DSYSCONFDIR=\"@sysconfdir@/zodiac\"
+
+OBJS    = msx.o msx_disk.o msx_misc.o msx_cartridge.o
+SRCS    = $(OBJS:.o=.c)
+TARS    = $(SRCS) Makefile.in msx.h CVS/
+
+
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $(TARGET)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $(TARGET)
+
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
+
+#tar:
+#	@(cd .. ; tar zcvf z80/z80.tar.gz `echo $(TARS) | tr [:space:] "\n" | sed -e s:^:z80/:` )
+
+
+distclean:
+	rm -f $(OBJS) $(TARGET) Makefile
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+install:
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+msx.o: ../../config.h
+msx.o: ../zodiac.h
+msx.o: ../../libmd/md.h ../../libmd/config.h ../../config.h
+msx.o: ../../libmd/md_depend.h
+msx.o: ../misc/ut.h
+msx.o: ../audio.h msx.h ../misc/ut.h ../z80/z80.h
+msx.o: ../z80_config.h ../zdb.h ../v99x8/v99x8.h
+msx_disk.o: ../../config.h
+msx_disk.o: ../zodiac.h ../../libmd/md.h
+msx_disk.o: ../../libmd/config.h ../../config.h ../../libmd/md_depend.h
+msx_disk.o: ../misc/ut.h
+msx_disk.o: ../z80/z80.h ../z80_config.h ../zdb.h msx.h
+msx_disk.o: ../misc/ut.h ../v99x8/v99x8.h
+msx_misc.o: ../../config.h
+msx_misc.o: ../zodiac.h
+msx_misc.o: ../../libmd/md.h ../../libmd/config.h ../../config.h
+msx_misc.o: ../../libmd/md_depend.h
+msx_misc.o: ../misc/ut.h
+msx_misc.o: ../audio.h ../msx/msx.h ../misc/ut.h
+msx_misc.o: ../z80/z80.h ../z80_config.h ../zdb.h ../v99x8/v99x8.h
+msx_misc.o: ../ym2149/ym2149.h ../ym2413/ym2413.h
+msx_cartridge.o: ../../libmd/config.h ../zodiac.h ../../libmd/md.h
+msx_cartridge.o: ../../config.h ../../libmd/md_depend.h
+msx_cartridge.o: ../misc/ut.h
+msx_cartridge.o: msx.h ../misc/ut.h ../z80/z80.h
+msx_cartridge.o: ../z80_config.h ../zdb.h ../v99x8/v99x8.h

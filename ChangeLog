@@ -1,0 +1,78 @@
+2001-07-15  Kenta MURATA <muraken@users.sourceforge.net>
+
+	* src/v99x8/v99x8_command.c: Implement SRCH and POINT command.
+	* src/zodiac.c, src/version.h: Append `--help' and `--version' options.
+
+2001-07-11  Hiroyuki YANAI <fk200329@fsinet.or.jp>
+	
+	* libmd/hpcfbio: Add 2bpp support code.
+	* libmd/mgl: Delete h-line drawing loop in put_refresh_line().
+
+2001-07-10  Hiroyuki YANAI <fk200329@fsinet.or.jp>
+
+	* libmd: hpcfbio support(it's imperfection).
+
+2001-07-08  SASAKI Shunsuke <eruchan@users.souceforge.net>
+
+	* version 0.7.0
+
+	* all: coding style fix.
+
+
+2001-06-18  Kenta MURATA <muraken@users.sourceforge.net>
+
+	* ChangeLog: New file from CHANGES.jp.
+
+2001-06-18  Zodiac Project
+
+	* README.jp: There is addition in compile process.  You must see it.
+
+	* all: Miscellaneous modification.
+
+	* all: Improve sound implementation.
+
+	* all: Modify MGL2 relations.
+
+	* all: Support PSG (EMU2149).
+
+	* all: Implement Z80's DAA instruction.
+
+	* all: Apply autoconf to entire tree.
+
+2001-04-18  Zodiac Project
+
+	* version 0.6.5
+
+	* all: Miscellaneous modification.
+
+	* all: Reconsider source directory structure.
+
+	* all: Modify keybord implementation.
+
+	* all: Modify critical bugs of sound relations.
+
+	* all: Import to CVS tree.
+
+2001-02-14  Zodiac Project
+
+	* version 0.6.2
+
+	* all: Support SSTP.
+
+2001-02-10  Zodiac Project
+
+	* version 0.6.1
+
+	* all: Modify Joistick implementation.
+
+	* all: Support Windows SDK/Mingw32 environment.
+
+	* all: Sound be turned off by -f0 option.
+
+	* all: Miscellaneous modification.
+
+2001-02-09  Zodiac Project
+
+	* version 0.6.0
+
+	* all: Initial release.

@@ -1,0 +1,156 @@
+#@configure_input@
+@SET_MAKE@
+
+TARGET  = zodiac
+
+prefix = @prefix@
+top_srcdir = @top_srcdir@
+mkinstalldirs = /bin/sh $(top_srcdir)/mkinstalldirs
+INSTALL = @INSTALL@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+bindir = $(prefix)/@bindir@
+mandir = @mandir@
+
+#SED     = sed
+#CC      = gcc
+CC      = @CC@
+RANLIB	= @RANLIB@
+
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd \
+          `@top_srcdir@/libmd/md-config --cflags`
+
+OBJS    = zodiac.o audio.o zdb.o
+#V9938.o
+LIBS    = -L@top_srcdir@/libmd -lmd `@top_srcdir@/libmd/md-config --libs` \
+		  @LIBS@
+MODULES = msx/msx.a z80/z80.a ym2149/ym2149.a ym2413/ym2413.a \
+		v99x8/v99x8.a misc/misc.a
+#MODDIRS = $(MODULES:H)
+
+SRCS    = $(OBJS:.o=.c)
+TARS    = $(SRCS) Makefile.in audio.h version.h.in \
+          z80_config.h z80_fastmem.h zdb.h zodiac.h CVS/
+
+SUBDIRS = misc msx v99x8 ym2149 ym2413 z80 
+
+
+
+all:	$(OBJS) $(MODULES) ../libmd/libmd.a
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) ); done
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(MODULES) $(LIBS)
+
+$(TARGET):	$(OBJS) $(MODULES) ../libmd/libmd.a
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) ); done
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(MODULES) $(LIBS)
+
+#$(MODULES):
+#	@(cd $(@:H) ; $(MAKE))
+
+msx/msx.a:
+	@(cd msx ; $(MAKE))
+
+z80/z80.a:
+	@(cd z80 ; $(MAKE))
+
+ym2149/ym2149.a:
+	@(cd ym2149 ; $(MAKE))
+
+ym2413/ym2413.a:
+	@(cd ym2413 ; $(MAKE))
+
+v99x8/v99x8.a:
+	@(cd v99x8 ; $(MAKE))
+
+misc/misc.a:
+	@(cd misc ; $(MAKE))
+
+
+
+../libmd/libmd.a:
+	@(cd ../libmd ; $(MAKE))
+
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
+
+
+install: $(TARGET)
+	@$(mkinstalldirs) $(bindir)
+	$(INSTALL_PROGRAM) $(TARGET) $(bindir)/$(TARGET)
+
+#	@if [ -d $(mandir)/$(LANG)/man1 ]; then \
+#		$(INSTALL_DATA) $(PROG).1 $(mandir)/$(LANG)/man1/$(PROG).1; \
+#		echo $(INSTALL_DATA) $(PROG).1 $(mandir)/$(LANG)/man1/$(PROG).1; \
+#	elif [ -d $(mandir)/ja_JP.euc/man1 ]; then \
+#		$(INSTALL_DATA) $(PROG).1 $(mandir)/ja_JP.euc/man1/$(PROG).1; \
+#		echo $(INSTALL_DATA) $(PROG).1 $(mandir)/ja_JP.euc/man1/$(PROG).1; \
+#	elif [ -d $(mandir)/ja_JP.EUC/man1 ]; then \
+#		$(INSTALL_DATA) $(PROG).1 $(mandir)/ja_JP.EUC/man1/$(PROG).1; \
+#		echo $(INSTALL_DATA) $(PROG).1 $(mandir)/ja_JP.EUC/man1/$(PROG).1; \
+#	elif [ -d $(mandir)/ja_JP.ujis/man1 ]; then \
+#		$(INSTALL_DATA) $(PROG).1 $(mandir)/ja_JP.ujis/man1/$(PROG).1; \
+#		echo $(INSTALL_DATA) $(PROG).1 $(mandir)/ja_JP.ujis/man1/$(PROG).1; \
+#	elif [ -d $(mandir)/ja/man1 ]; then \
+#		$(INSTALL_DATA) $(PROG).1 $(mandir)/ja/man1/$(PROG).1; \
+#		echo $(INSTALL_DATA) $(PROG).1 $(mandir)/ja/man1/$(PROG).1; \
+#	else \
+#		$(mkinstalldirs) $(mandir)/man1; \
+#		$(INSTALL_DATA) $(PROG).1 $(mandir)/man1/$(PROG).1; \
+#		echo $(INSTALL_DATA) $(PROG).1 $(mandir)/man1/$(PROG).1; \
+#	fi
+
+
+
+
+distclean:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) distclean ); done
+	rm -f $(OBJS) $(TARGET) Makefile
+
+clean:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) clean ); done
+	rm -f $(OBJS) $(TARGET)
+
+tar-list:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) ARC=$(ARC)$$i/ tar-list ); done
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+depend:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) depend ); done
+#
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+zodiac.o: ../config.h
+zodiac.o: zodiac.h
+zodiac.o: ../libmd/md.h ../libmd/config.h ../libmd/md_depend.h
+zodiac.o: misc/ut.h
+zodiac.o: audio.h msx/msx.h misc/ut.h z80/z80.h
+zodiac.o: z80_config.h zdb.h v99x8/v99x8.h version.h v99x8/v99x8.h
+audio.o: ../config.h
+audio.o: zodiac.h ../libmd/md.h ../libmd/config.h
+audio.o: ../libmd/md_depend.h
+audio.o: misc/ut.h
+audio.o: audio.h
+zdb.o: ../config.h
+zdb.o: zodiac.h ../libmd/md.h ../libmd/config.h
+zdb.o: ../libmd/md_depend.h
+zdb.o: misc/ut.h
+zdb.o: zdb.h

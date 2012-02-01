@@ -1,0 +1,127 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/zodiac.c)
+AC_CONFIG_HEADER(config.h)
+
+PACKAGE=zodiac
+VERSION=0.8.1
+
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+
+
+
+dnl
+ARFLAGS=cr
+WANT_HPCFBIO=no
+WANT_MGL2=no
+WANT_SDL=yes
+
+
+AC_CANONICAL_SYSTEM
+case $target_os in
+  mingw*|cygwin*)
+
+# Windows workaround
+    CFLAGS="-mno-cygwin $CFLAGS"
+    XXX_MINGW=yes
+    ;;
+esac
+
+
+
+dnl
+#AC_CANONICAL_SYSTEM
+#case "$target" in
+#  *-*-freebsd*) CFLAGS="$CFLAGS -pipe -O3 -m486 -fno-strength-reduce" ;;
+#  mipsel-*-netbsd*) CFLAGS="$CFLAGS -O6 -ffast-math -finline-functions -fomit-frame-pointer \
+#  -fno-strength-reduce -mips2" ;;
+#  *-*-netbsd*) CFLAGS="$CFLAGS -pipe -O6 -fomit-frame-pointer -fno-strength-reduce" ;;
+#esac
+
+dnl
+AC_ARG_WITH(sdl,
+  [  --with-sdl              compile with SDL],[WANT_SDL=$withval],[])
+AC_ARG_WITH(mgl2,
+  [  --with-mgl2             compile with MGL2],[WANT_MGL2=$withval],[])
+AC_ARG_WITH(hpcfbio,
+  [  --with-hpcfbio          compile with hpcfbio],[WANT_HPCFBIO=$withval],[])
+
+AC_ARG_WITH(tdebugger,
+  [  --with-tdebugger        compile with tiny debugger],[WANT_TDEBUGGER=$withval],[])
+
+AC_ARG_WITH(debug,
+  [  --with-debug            compile with debug],[WANT_DEBUG=$withval],[])
+
+
+dnl
+AC_DEFINE(MD_BPP, 16)
+
+if test x$WANT_DEBUG != xyes ; then
+	CFLAGS="$CFLAGS -DNDEBUG"
+fi
+
+if test x$WANT_TDEBUGGER = xyes ; then
+	CFLAGS="$CFLAGS -DTDEBUGGER"
+fi
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lm:
+if test x$XXX_MINGW != xyes ; then
+	AC_CHECK_LIB(m, main)
+fi
+dnl FLEX
+AC_CHECK_LIB(fl, main)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h sys/time.h sys/types.h unistd.h)
+AC_CHECK_HEADERS(stdarg.h varargs.h)
+
+if test x$XXX_MINGW != xyes ; then
+	AC_CHECK_HEADERS(sys/utsname.h)
+fi
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+AC_C_BIGENDIAN
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+AC_MINGW32
+
+dnl Checks for library functions.
+AC_FUNC_MMAP
+AC_FUNC_VPRINTF
+
+dnl Checks for tool programs.
+AC_CHECK_PROG(AR, ar, ar, :, /usr/bin/)
+AC_CHECK_PROG(FLEX, flex, flex, :, /usr/bin/)
+
+AC_SUBST(AR)
+AC_SUBST(ARFLAGS)
+AC_SUBST(RANLIB)
+AC_SUBST(FLEX)
+
+
+AC_CONFIG_SUBDIRS(./libmd)
+
+AC_OUTPUT(
+CWproject/Makefile
+Makefile
+src/Makefile
+src/misc/Makefile
+src/msx/Makefile
+src/v99x8/Makefile
+src/ym2149/Makefile
+src/ym2413/Makefile
+src/z80/Makefile
+src/version.h
+)

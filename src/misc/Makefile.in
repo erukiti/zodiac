@@ -1,0 +1,65 @@
+#@configure_input@
+TARGET  = misc.a
+
+#AR      = ar
+#ARFLAGS = cr
+#SED     = sed
+#CC      = gcc
+AR      = @AR@
+ARFLAGS = @ARFLAGS@
+CC      = @CC@
+RANLIB	= @RANLIB@
+
+prefix = @prefix@
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd \
+			`@top_srcdir@/libmd/md-config --cflags` \
+			-DDATADIR=\"@datadir@/zodiac\"
+
+OBJS    = ut.o
+SRCS    = $(OBJS:.o=.c)
+TARS    = $(SRCS) Makefile.in ut.h README.jp CVS/
+
+
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $(TARGET)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $(TARGET)
+
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
+
+distclean:
+	rm -f $(OBJS) $(TARGET) Makefile
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+install:
+
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+ut.o: ../../config.h
+ut.o: ../../libmd/md.h ../../libmd/config.h
+ut.o: ../../config.h ../../libmd/md_depend.h
+ut.o: ut.h

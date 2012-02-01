@@ -1,0 +1,13 @@
+#ifndef __VERSION_H_
+#define __VERSION_H_
+
+#define VERSION "@VERSION@"
+#define PACKAGE "@PACKAGE@"
+
+#define COPYRIGHT "Copyright (c) 2000-2002 SASAKI Shunsuke <eruchan@users.sourceforge.net>.\n" \
+                  "Copyright (c) 2001-2002 The Zodiac project.\n" \
+                  "All rights reserved.\n" \
+                  "\n" \
+                  "Project webpage is <http://zodiac.sourceforge.net>." 
+
+#endif

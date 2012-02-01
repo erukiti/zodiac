@@ -1,0 +1,33 @@
+# config.site for configure
+HOSTCC=gcc
+CC=mipsel-netbsd-gcc
+CXX=mipsel-netbsd-gcc
+CFLAGS="-O6 -ffast-math -finline-functions -fomit-frame-pointer \
+        -fno-strength-reduce -mips2 \
+        -I/usr/pkg/cross/mipsel-netbsd/include \
+        -I/hpcmips-diskless/usr/pkg/include"
+CXXFLAGS="-O6 -ffast-math -finline-functions -fomit-frame-pointer \
+          -fno-strength-reduce -mips2 \
+          -I/usr/pkg/cross/mipsel-netbsd/include/g++"
+CPPFLAGS="-O6 -ffast-math -finline-functions -fomit-frame-pointer \
+          -fno-strength-reduce -mips2 \
+          -I/usr/pkg/cross/mipsel-netbsd/include/g++"
+LDFLAGS="-L/usr/pkg/cross/lib -L/hpcmips-diskless/usr/pkg/lib"
+AR=mipsel-netbsd-ar
+RANLIB=mipsel-netbsd-ranlib
+NM=mipsel-netbsd-nm
+ac_cv_path_NM=mipsel-netbsd-nm
+ac_cv_func_setpgrp_void=yes
+host=mipsel-netbsd
+x_includes=/usr/pkg/cross/mipsel-netbsd/include
+x_libraries=/usr/pkg/cross/mipsel-netbsd/lib/X11
+
+
+# These are for GNU shellutils
+jm_cv_have_proc_uptime=yes
+jm_cv_func_working_gnu_strftime=yes
+
+ac_cv_prog_CC=mipsel-netbsd-gcc
+ac_cv_prog_AR=mipsel-netbsd-ar
+ac_cv_prog_RANLIB=mipsel-netbsd-ranlib
+

@@ -1,0 +1,174 @@
+  必ず同梱しているドキュメント (特に README.jp) をご覧ください．
+
+
+○ zodiac について
+
+
+  Zodiac を SDL/MSL/CodeWarriorPro6 環境でコンパイルしたバイナリーです．
+
+  http://zodiac.sourceforge.net/ でソースコードを公開しています．
+
+
+○ 実行方法
+
+
+  BIOS ROM や，実行したいディスクイメージなどを，
+
+  zodiacと同じフォルダーにおいてください．
+
+
+○ 利用方法
+
+
+  README.jp を参照してください．
+  
+  オプションの設定は，コマンドキーを押しながらアプリを立ち上げることで
+  
+  設定ダイアログが表示されます．なお，GameSproketを利用した
+  
+  フルスクリーンモードはサポートしていません．
+
+  現在 GUI 機能を有していませんので，
+
+  完全にコマンドラインでオプションを指定する必要があります．
+
+
+§ 免責
+
+
+○ ライセンス
+
+
+  zodiac のライセンスは GPL です．
+
+
+○ SDL について
+
+
+  SDL.PPC.lib をアーカイブに含んでいますが，
+
+  これはバイナリならびにソースは http://www.libsdl.org/ で入手できます．
+
+  ライセンスは LGPL です．
+
+
+○ BSD copyrights
+
+
+/*
+
+ * Copyright (c) 2000, 2001
+
+ *    SASAKI Shunsuke (eruchan@users.sourceforge.net)
+
+ *    YANAI Hiroyuki  (fk200329@fsinet.or.jp)
+
+ * All rights reserved.
+
+ *
+
+ * Redistribution and use in source and binary forms, with or without
+
+ * modification, are permitted provided that the following conditions
+
+ * are met:
+
+ * 1. Redistributions of source code must retain the above copyright
+
+ *    notice, this list of conditions and the following disclaimer.
+
+ * 2. Redistributions in binary form must reproduce the above copyright
+
+ *    notice, this list of conditions and the following disclaimer in the
+
+ *    documentation and/or other materials provided with the distribution.
+
+ * 3. The name of the author may not be used to endorse or promote products
+
+ *    derived from this software without specific prior written permission.
+
+ *
+
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR
+
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+
+ * SUCH DAMAGE.
+
+ */
+
+
+/*
+
+ * Copyright (c) 2000, 2001
+
+ *    Wataru Kitada (wata_ru@users.sourceforge.net)
+
+ * All rights reserved.
+
+ *
+
+ * Redistribution and use in source and binary forms, with or without
+
+ * modification, are permitted provided that the following conditions
+
+ * are met:
+
+ * 1. Redistributions of source code must retain the above copyright
+
+ *    notice, this list of conditions and the following disclaimer.
+
+ * 2. Redistributions in binary form must reproduce the above copyright
+
+ *    notice, this list of conditions and the following disclaimer in the
+
+ *    documentation and/or other materials provided with the distribution.
+
+ * 3. The name of the author may not be used to endorse or promote products
+
+ *    derived from this software without specific prior written permission.
+
+ *
+
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR
+
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+
+ * SUCH DAMAGE.
+
+ */
+
+
+

@@ -1,0 +1,189 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(md.h.in)
+#AC_CONFIG_SRCDIR(getopt.c)
+AC_CONFIG_HEADER(config.h)
+
+#AC_CANONICAL_HOST
+AC_CANONICAL_SYSTEM
+
+VERSION=0.3.3
+AC_SUBST(VERSION)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_LN_S
+AC_PROG_RANLIB
+
+
+# MD_DIR_LAYOUT
+#  0. FLAT
+#  1. UNIX
+#  2. WINDOWS
+#  3. MAC
+
+case $target_os in
+#  beos*)
+#    ;;
+  mingw*|cygwin*)
+    MD_DIR_LAYOUT=2
+    ;;
+  *)
+    MD_DIR_LAYOUT=1
+esac
+AC_SUBST(MD_DIR_LAYOUT)
+
+
+
+WANT_SDL=no
+WANT_MGL2=no
+WANT_HPCFBIO=no
+
+dnl AC_CANONICAL_SYSTEM
+dnl case "$host" in
+dnl  *-*-freebsd*) CFLAGS="$CFLAGS -pipe -O3 -m486 -fno-strength-reduce" ;;
+dnl  mipsel-*-netbsd*) CFLAGS="$CFLAGS -O6 -ffast-math -finline-functions -fomit-frame-pointer -fno-strength-reduce\
+dnl			    -mips2" ;;
+dnl  *-*-netbsd*) CFLAGS="$CFLAGS -pipe -O6 -fomit-frame-pointer -fno-strength-reduce" ;;
+dnl esac
+
+
+AC_ARG_WITH(sdl,
+  [  --with-sdl		compile with SDL],[WANT_SDL=$withval],[])
+AC_ARG_WITH(mgl2,
+  [  --with-mgl2	compile with MGL2],[WANT_MGL2=$withval],[])
+AC_ARG_WITH(hpcfbio,
+  [  --with-hpcfbio	compile with hpcfbio],[WANT_HPCFBIO=$withval],[])
+
+AC_ARG_WITH(debug,
+  [  --with-debug            compile with debug],[WANT_DEBUG=$withval],[])
+
+dnl XXX
+if [[ "x$WANT_SDL" = "xno" -a "x$WANT_MGL2" = "xno" -a "x$WANT_HPCFBIO" ]]; then
+	WANT_SDL=yes
+	WANT_MGL2=yes
+	WANT_HPCFBIO=yes
+fi
+
+if test "x$WANT_SDL" = "xyes"; then
+	AC_CHECK_PROGS(SDL_CONFIG, sdl-config sdl10-config sdl11-config sdl12-config, none)
+	if test x$SDL_CONFIG != xnone; then
+		ARCH=sdl
+		WANT_MGL2=no
+	fi
+fi
+
+if test "x$WANT_MGL2" = "xyes"; then
+	AC_CHECK_PROGS(MGL2_CONFIG, mgl2-config, none)
+	if test x$MGL2_CONFIG != xnone; then
+	  CFLAGS=`$MGL2_CONFIG --cflags`
+	  LIBS=`$MGL2_CONFIG --libs`
+	  AC_MSG_CHECKING(whether the MGL2 can be compiled in)
+	  AC_TRY_LINK([
+#include "mgl2.h"],[
+static struct screen *scr;
+void foo(void)
+{
+open_graph();
+scr = create_memscreen(30, 30, 0, STK_NATIVE, 0);
+}],
+	ARCH=mgl
+	AC_MSG_RESULT(yes)
+	AC_DEFINE(MD_NEEDTYPE),
+	AC_MSG_RESULT(no))
+	fi
+fi
+
+if test "x$WANT_HPCFBIO" = "xyes"; then
+	CFLAGS=""
+	LIBS=""
+	AC_MSG_CHECKING(whether the hpcfbio can be compiled in)
+	AC_TRY_LINK([
+#include <dev/hpc/hpcfbio.h>],[
+static struct hpcfb_fbconf fbconf;
+void foo(void)
+{
+fbconf.hf_height = 0;
+}],
+	ARCH=hpcfbio
+	AC_MSG_RESULT(yes)
+	AC_DEFINE(MD_NEEDTYPE),
+	AC_MSG_RESULT(no))
+fi
+
+
+
+case "$ARCH" in
+ sdl)
+  CFLAGS="$CFLAGS `$SDL_CONFIG --cflags`"
+  LIBS=`$SDL_CONFIG --libs`
+ ;;
+ mgl)
+  CFLAGS="$CFLAGS `$MGL2_CONFIG --cflags`"
+  LIBS=`$MGL2_CONFIG --libs`
+ ;;
+ hpcfbio)
+  CFLAGS=""
+  LIBS=""
+ ;;
+ *)
+    AC_MSG_ERROR([Lowlevel media library is not found.])
+ ;;
+esac
+
+if test x$WANT_DEBUG != xyes ; then
+	CFLAGS="$CFLAGS -DNDEBUG"
+fi
+
+AC_SUBST(ARCH)
+dnl AC_SUBST(CFLAGS)
+
+AC_CHECK_PROG(AR, ar, ar, :, /usr/bin/)
+AC_SUBST(AR)
+AC_SUBST(RANLIB)
+
+rm -f Makefile.in md-config.in md_depend.h
+ln -s $ARCH/Makefile.in Makefile.in
+ln -s $ARCH/md-config.in md-config.in
+ln -s $ARCH/md_depend.h md_depend.h
+#$(LN_S) $ARCH/Makefile.in Makefile.in
+
+
+dnl Checks for libraries.
+
+
+dnl Checks for header files.
+AC_CHECK_HEADERS(sys/time.h unistd.h)
+AC_CHECK_HEADERS(libgen.h sys/utsname.h)
+
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_HEADER_TIME
+AC_C_BIGENDIAN
+AC_TYPE_SIZE_T
+dnl AC_C_INLINE
+
+
+dnl AC_TYPE_OFF_T
+dnl AC_STRUCT_TM
+
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(gettimeofday socket vsnprintf)
+AC_CHECK_FUNCS(getopt dirname basename uname)
+AC_FUNC_MMAP
+AC_TYPE_SIGNAL
+
+
+#AC_REPLACE_FUNCS(getopt)
+
+
+dnl AC_PROG_GCC_TRADITIONAL
+dnl AC_FUNC_STRFTIME
+dnl AC_FUNC_VPRINTF
+dnl AC_FUNC_ALLOCA
+dnl AC_CHECK_FUNCS()
+
+
+AC_OUTPUT(Makefile md-config md.h)
+chmod +x md-config

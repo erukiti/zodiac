@@ -1,0 +1,21 @@
+#!/bin/sh
+#@configure_input@
+
+HPCFBIO_CONFIG=
+VERSION=@VERSION@
+#ARCH=@ARCH@
+
+if test $# -eq 0; then
+	echo "Usage: md-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--libs] [--cflags] [--arch]"
+	exit 1
+fi
+
+case $1 in
+	--version)
+	echo "md-config $VERSION"
+	;;
+
+	--arch)
+	echo "@ARCH@"
+	;;
+esac

@@ -1,0 +1,29 @@
+#!/bin/sh
+#@configure_input@
+
+MGL2_CONFIG=@MGL2_CONFIG@
+VERSION=@VERSION@
+#ARCH=@ARCH@
+
+if test $# -eq 0; then
+	echo "Usage: md-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--libs] [--cflags] [--arch]"
+	exit 1
+fi
+
+case $1 in
+#	--version)
+#	echo "md-config $(VERSION)"
+#	;;
+
+	--arch)
+	echo "@ARCH@"
+	;;
+
+	--libs)
+#	echo "`$MGL2_CONFIG $1 $2 $3 $4 $5 $6 $7 $8 $9` @INETLIBS@"
+	echo "`$MGL2_CONFIG $1 $2 $3 $4 $5 $6 $7 $8 $9`"
+	;;
+
+	*)
+	$MGL2_CONFIG $1 $2 $3 $4 $5 $6 $7 $8 $9
+esac

@@ -1,0 +1,79 @@
+#@configure_input@
+TARGET  = v99x8.a
+
+#AR      = ar
+#ARFLAGS = cr
+#CC      = gcc
+AR      = @AR@
+ARFLAGS = @ARFLAGS@
+CC      = @CC@
+RANLIB	= @RANLIB@
+
+#include	../Makeopt
+
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd -I../z80 \
+			`@top_srcdir@/libmd/md-config --cflags`
+
+OBJS    = v99x8.o v99x8_command.o v99x8_refresh.o
+SRCS    = $(OBJS:.o=.c)
+TARS    = $(SRCS) Makefile.in v99x8.h CVS/
+
+
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $(TARGET)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $(TARGET)
+
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
+
+#tar:
+#	@(cd .. ; tar zcvf z80/z80.tar.gz `echo $(TARS) | tr [:space:] "\n" | sed -e s:^:z80/:` )
+
+
+distclean:
+	rm -f $(OBJS) $(TARGET) Makefile
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+install:
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+v99x8.o: ../../config.h
+v99x8.o: ../zodiac.h ../../libmd/md.h
+v99x8.o: ../../libmd/config.h ../../config.h ../../libmd/md_depend.h
+v99x8.o: ../misc/ut.h
+v99x8.o: v99x8.h ../misc/ut.h ../z80/z80.h
+v99x8.o: ../z80_config.h ../zdb.h
+v99x8_command.o: ../../config.h
+v99x8_command.o: ../zodiac.h ../../libmd/md.h
+v99x8_command.o: ../../libmd/config.h ../../config.h ../../libmd/md_depend.h
+v99x8_command.o: ../misc/ut.h
+v99x8_command.o: v99x8.h ../misc/ut.h
+v99x8_refresh.o: ../../config.h
+v99x8_refresh.o: ../zodiac.h ../../libmd/md.h
+v99x8_refresh.o: ../../libmd/config.h ../../config.h ../../libmd/md_depend.h
+v99x8_refresh.o: ../misc/ut.h
+v99x8_refresh.o: v99x8.h ../misc/ut.h

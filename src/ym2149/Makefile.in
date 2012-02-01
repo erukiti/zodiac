@@ -1,0 +1,70 @@
+#@configure_input@
+TARGET  = ym2149.a
+
+#AR      = ar
+#ARFLAGS = cr
+#CC      = gcc
+AR      = @AR@
+ARFLAGS = @ARFLAGS@
+CC      = @CC@
+RANLIB	= @RANLIB@
+
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd \
+			`@top_srcdir@/libmd/md-config --cflags`
+
+OBJS    = ym2149.o emu2149.o
+SRCS    = $(OBJS:.o=.c)
+TARS    = $(SRCS) Makefile.in ym2149.h README.jp \
+			emu2149.h emutypes.h sample.c CVS/
+
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $(TARGET)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $(TARGET)
+
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
+
+sample:	emu2149.o sample.o
+	$(CC) $(CFLAGS) -o sample emu2149.o sample.o `../../libmd/md-config --libs`
+
+#tar:
+#	@(cd .. ; tar zcvf z80/z80.tar.gz `echo $(TARS) | tr [:space:] "\n" | sed -e s:^:z80/:` )
+
+
+distclean:
+	rm -f $(OBJS) $(TARGET) sample.o sample Makefile
+
+clean:
+	rm -f $(OBJS) $(TARGET) sample.o sample
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+install:
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+ym2149.o: ../../libmd/config.h
+ym2149.o: ../zodiac.h
+ym2149.o: ../../libmd/md.h ../../config.h ../../libmd/md_depend.h
+ym2149.o: ../misc/ut.h
+ym2149.o: ../audio.h emu2149.h emutypes.h
+emu2149.o: emu2149.h emutypes.h

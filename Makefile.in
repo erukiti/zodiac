@@ -1,0 +1,56 @@
+#@configure_input@
+@SET_MAKE@
+
+PROG = zodiac
+VER  = @VERSION@
+SUBDIRS = libmd src CWproject
+
+DOCS = BUGS.jp COPYING COPYING.jp ChangeLog ChangeLog.jp INSTALL.jp \
+       NEWS.jp README-MacOSclassic.jp README-Windows.jp \
+       README.en README.jp TODO.jp
+
+TARS = Makefile.in acconfig.h autogen.sh config.guess config.sub \
+       config.h.in configure configure.in hpcmips-cross-config.site \
+       install-sh mkinstalldirs CVS/ $(DOCS)
+
+
+all:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) all ); done
+
+depend:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) depend ); done
+
+clean:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) clean ); done
+
+distclean:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) distclean ); done
+	rm -f config.cache config.log config.status config.h Makefile 
+
+install:
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) install ); done;
+
+tar:
+	@cp /dev/null lists.tmp
+	@for i in $(SUBDIRS); \
+	do (cd $$i ; $(MAKE) ARC=$(PROG)-$(VER)/$$i/ PROG=$(PROG) tar-list )>> lists.tmp; done
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(PROG)-$(VER)/: | sort >> lists.tmp
+	@ln -s . $(PROG)-$(VER)
+	@tar zcvf $(PROG)-$(VER).tar.gz `cat lists.tmp`
+	@rm $(PROG)-$(VER)
+	@rm lists.tmp
+
+winarc:
+	@mkdir $(PROG)
+	@cp -r $(DOCS) $(PROG)/
+	@cp src/zodiac.exe $(PROG)/
+	@cp /usr/local/cross-tools/i386-mingw32msvc/lib/SDL.dll $(PROG)/
+	@strip $(PROG)/zodiac.exe
+	@(cd $(PROG)/ ; qkc -s -m $(DOCS))
+	@lha -co5 $(PROG)-win-$(VER).lzh $(PROG)/
+	@rm -rf $(PROG)

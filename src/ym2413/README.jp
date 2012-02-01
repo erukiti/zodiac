@@ -1,0 +1,21 @@
+  EMU2413 と、それを Zodiac で利用するためのラッパーです。
+
+○ EMU2413
+
+  Mitsutaka Okazaki さんの著作物で、GPL ではありません。
+
+****
+  MSXplug - Copyright (C) 2001 Mitsutaka Okazaki.
+  http://www.angel.ne.jp/~okazaki/ym2413/
+
+  This software is provided 'as-is', without any express or implied
+  warranty. 
+
+  Permission is granted to anyone to use this software for any purpose, 
+  including commercial applications.
+  To alter this software and redistribute it freely, if the origin of 
+  this software is not misrepresented, and this notice is not removed
+  from any source distribution.
+****
+
+  make sample で、sample を make する事ができます。

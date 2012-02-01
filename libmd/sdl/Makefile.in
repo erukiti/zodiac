@@ -1,0 +1,97 @@
+#@configure_input@
+# @ARCH@/Makefile
+#
+#
+
+TARGET  = libmd.a
+
+ARCH    = @ARCH@
+VERSION = @VERSION@
+
+
+AR      = @AR@
+ARFLAGS = cr
+CC      = @CC@
+DEFS    = -DARCH=$(ARCH)
+RANLIB  = @RANLIB@
+
+CFLAGS += @CFLAGS@ `./md-config --cflags` $(DEFS) -Wall -g -I.
+
+OBJS_MI  = profile.o refresh.o unix.o
+OBJS_ARCH= $(ARCH)/md_$(ARCH).o
+OBJS     = $(OBJS_MI) $(OBJS_ARCH)
+SRCS     = $(OBJS:.o=.c)
+
+TARS = $(SRCS) acconfig.h check.c md.h.in config.guess config.h.in \
+       config.sub configure configure.in install-sh \
+       sdl/md_depend.h sdl/md-config.in sdl/Makefile.in sdl/CVS/ \
+       mgl/md_depend.h mgl/md-config.in mgl/Makefile.in mgl/CVS \
+       hpcfbio/md_depend.h hpcfbio/md-config.in hpcfbio/Makefile.in \
+       hpcfbio/CVS hpcfbio/md_hpcfbio.c mgl/md_mgl.c CVS/
+
+
+
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $(TARGET)
+	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RANLIB) $(TARGET)
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+distclean:
+	rm -f $(OBJS) $(TARGET) \
+		config.cache config.log config.status config.h \
+		Makefile.in Makefile md-config md-config.in md_depend.h
+
+
+tar:
+	@(cd .. ; tar zcvf libmd/libmd-$(VERSION).tar.gz `echo $(TARS) | tr [:space:] "\n" | sed -e s:^:libmd/:` )
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv $(ARCH)/Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > $(ARCH)/Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> $(ARCH)/Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> $(ARCH)/Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+	@cp Makefile Makefile.tmp
+	@mv Makefile Makefile.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.bak > Makefile
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g" \
+		-e "/: *$$/d" Makefile.tmp >> Makefile
+	@rm -f Makefile.bak Makefile.tmp
+
+install:
+
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+profile.o: md.h config.h ../config.h md_depend.h
+refresh.o: md.h config.h ../config.h md_depend.h
+unix.o: config.h
+unix.o: md.h ../config.h md_depend.h
+sdl/md_sdl.o: md.h config.h
+sdl/md_sdl.o: ../config.h md_depend.h

@@ -1,0 +1,153 @@
+/*
+ * Copyright (c) 2000-2002 SASAKI Shunsuke (eruchan@users.sourceforge.net).
+ * Copyright (c) 2001-2002 The Zodiac project.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+#ifndef __MD_H_
+#define __MD_H_
+
+#include "config.h"
+#include "../config.h"
+
+#define MD_FLAT 0
+#define MD_UNIX 1
+#define MD_WINDOWS 2
+#define MD_MAC 3
+
+#define MD_DIR_LAYOUT @MD_DIR_LAYOUT@
+
+#define MD_ARCH "@ARCH@"
+
+
+
+
+#ifndef TRUE
+#	define FALSE 0
+#	define TRUE (!FALSE)
+#endif
+
+typedef int bool;
+
+#ifdef MD_NEEDTYPE	/* XXX */
+	typedef unsigned char Uint8;
+	typedef unsigned short Uint16;
+	typedef unsigned int Uint32;
+	typedef signed char Sint8;
+	typedef signed short Sint16;
+	typedef signed int Sint32;
+#endif /* MD_NEEDTYPE */
+
+#include "md_depend.h"
+
+
+#ifdef MD_NEEDINLINE
+
+#if defined(_MSC_VER)
+#	define __inline__ __forceinline
+#elif defined(_MWERKS_)
+#	define __inline__ inline
+#elif !defined(__GNUC__)
+#	define __inline__
+#endif
+
+#endif /* MD_NEEDINLINE */
+
+
+typedef union
+{
+#ifdef WORDS_BIGENDIAN
+	struct
+	{
+		Uint8 h;
+		Uint8 l;
+	} b;
+#else
+	struct
+	{
+		Uint8 l;
+		Uint8 h;
+	} b;
+#endif
+
+	Uint16 w;
+} pair16l_t;	/* 16bit little endian architecture */
+
+
+#ifndef max
+#	define max(x, y) ((x) > (y) ? (x) : (y))
+#	define min(x, y) ((x) < (y) ? (x) : (y))
+#endif
+
+
+extern void profile_clear(void);
+extern void profile_start(int n);
+extern void profile_stop(int n);
+extern int profile_result(int n);
+
+extern void md_refresh_init(int sync, int framskip);
+extern bool md_refresh_sync(void);
+extern void md_refresh_pause(bool f);
+extern void md_refresh_adjust(int adjust);
+
+typedef struct
+{
+	int time;
+	int skip;
+	int frame;
+} md_fps_t;
+
+extern md_fps_t md_fps;
+
+#ifndef HAVE_GETOPT
+	extern char *optarg;
+	extern int optind;
+	extern int optopt;
+	extern int optreset;
+
+	extern int getopt(int argc, char * const *argv, const char *opt);
+#endif
+
+#ifndef HAVE_UNAME
+
+// XXX #ifndef SYS_NMLN
+#	define SYS_NMLN 64
+// XXX #endif
+
+struct utsname
+{
+	char sysname[SYS_NMLN];
+	char nodename[SYS_NMLN];
+	char release[SYS_NMLN];
+	char version[SYS_NMLN];
+	char machine[SYS_NMLN];
+};
+
+extern int uname(struct utsname *u);
+#endif
+
+
+#endif /* __MD_H_ */

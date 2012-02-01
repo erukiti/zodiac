@@ -1,0 +1,113 @@
+2002-04-05  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* 0.8.1 リリース
+
+2002-04-04  YANAI Hiroyuki <hyanai@users.sourceforge.net>
+
+	* /configure.in:
+	  typo の修正
+	  CFLGAS の設定を生かすようにした
+	* src/msx/msx_misc.c
+	* src/z80/z80.c
+	* src/z80/z80_codemn.c
+	* src/z80/z80_debugger.c
+	  コンパイルの条件を修正(EXTDEBUGGERを明示的に付けない限り
+	  、ext_debugger処理を用いない)
+	* src/zdb.c
+	  zdb_tiny_onoff() な宣言を zdb_ext_onoff() に修正
+
+2002-04-03  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* zdb の条件の間違い(#ifdef NDEBUG) の修正
+	* src/z80: halt 処理の修正
+	* libmd/sdl/md_sdl.c: ジョイスティックのコードを追加
+
+2002-03-31  Wataru Kitada <wata_ru@users.sourceforge.net>
+
+	* src/z80/z80_internal.h: Z80_INC8/DEC8 を正しく Uint8 として
+	  計算するように修正
+
+2002-03-31  YANAI Hiroyuki <hyanai@users.sourceforge.net>
+
+	* /configure.in:
+	* /src/z80/Makefile.in: flex を用いるようにするた
+	  めの変更を入れた。
+
+2002-03-26  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* src/msx_disk.c: PHYDIO のページ1への転送時に
+	  RAMAD1(f342h) にスロット切り替えを行うようにした
+
+2002-03-22  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* 0.8.0 リリース
+
+2002-03-21  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* -R で RC フィルターの R を指定。-C で C を指定するオプションの増設
+	* src/msx/msx_disk.c: DPB の取得処理の改善
+
+2002-03-19  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* Okazaki さんの RC フィルターを組み込んだ
+	* FIR LPF を廃止
+
+2002-03-17  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* -L で LPF の段数を指定できるようにした
+	  デフォルトは 11 段で、0 なら LPF 無効
+	* Windows 上での MinGW 環境のコンパイル用の workaround
+	* Makefile の修正
+	* libmd/sdl: SDL の終了イベントで正常に終了できなかったバグの修正
+
+2002-03-15  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* uname(3) によるバージョン情報の表示
+	* Windows: uname(3) の port
+	* 音源関係の修正を merge
+
+2002-03-14  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* CHANGES.jp を NEWS.jp にリネーム
+	* MD_LITTLE, MD_BIG を廃止。autoconf の WORDS_BIGENDIAN のみ使用
+
+2002-03-13  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* ドキュメントの修正
+	* make install に対応
+	* MD_MAPRGB15 の廃止
+	* NEED_REAL8BIT, NEED_REAL16BIT の廃止
+	* MD_USER_PROFILER の廃止
+
+2002-03-12  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* src/ym2149, src/ym2413: 音源コアを in_msx021b_s.zip に update
+	* BIOS を読むディレクトリを変更(BIOS/ の廃止)
+	* copyright, version infomation の書き換え
+
+2002-03-11  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* 音ズレの補正のテスト。
+
+2002-03-10  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* FIR LPF の組み込みのテスト。現時点では問題あり。
+
+2002-03-01  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* 音源の周波数指定の修正
+
+2002-02-27  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* volume 実装
+	* audio.c: 発音開始時のギャップ処理のテスト
+	* 各ソースの #include の順序を修正
+
+2002-02-26  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* sys/types.h を configure で検出
+
+2002-02-16  SASAKI Shunsuke <eruchan@users.sourceforge.net>
+
+	* src/ym2149, src/ym2413: 音源コアを in_msx020s.zip に update
+

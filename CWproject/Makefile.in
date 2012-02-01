@@ -1,0 +1,40 @@
+#TARGET  = 
+
+prefix = @prefix@
+CFLAGS += @CFLAGS@ -Wall -I@top_srcdir@/libmd -I../z80 \
+			`@top_srcdir@/libmd/md-config --cflags` \
+			-DDATADIR=\"@datadir@/zodiac\"
+
+TARS    = README-CW.en.txt README-CW.sjis.txt config.h zodiac.mcp.xml \
+          Makefile.in CVS/
+
+
+
+all:
+
+distclean:
+	rm -f Makefile
+
+clean:
+
+tar-list:
+	@echo $(TARS) | tr [:space:] "\n" | sed -e s:^:$(ARC): | sort
+
+install:
+
+
+depend:
+	@cp Makefile.in Makefile.tmp
+	@mv Makefile.in Makefile.in.bak
+	@makedepend -s "# DO NOT DELETE THIS LINE -- make depend depends on it."\
+		-f Makefile.tmp -- $(CFLAGS) -- $(SRCS)
+	@rm -f Makefile.tmp.bak
+	@sed -e "/^# DO NOT DELETE THIS LINE/,$$$$d" Makefile.in.bak > Makefile.in
+	@echo "# DO NOT DELETE THIS LINE -- make depend depends on it." >> Makefile.in
+	@sed -e "1,/^# DO NOT DELETE THIS LINE/d" \
+		-e "s/[\t ]\/[^ ]*//g"\
+		-e "/: *$$/d" Makefile.tmp >> Makefile.in
+	@rm -f Makefile.in.bak Makefile.tmp
+
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
